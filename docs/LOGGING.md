@@ -182,6 +182,8 @@ logger.error(`Job failed: ${jobName}`, error);
 
 ### View Real-time Logs
 
+**Linux/Mac (Bash):**
+
 ```bash
 # Watch combined logs
 tail -f logs/combined.log
@@ -190,7 +192,22 @@ tail -f logs/combined.log
 tail -f logs/error.log
 ```
 
+**Windows (PowerShell):**
+
+```powershell
+# Watch combined logs (last 50 lines, live updates)
+Get-Content logs\combined.log -Wait -Tail 50
+
+# Watch error logs only
+Get-Content logs\error.log -Wait -Tail 50
+
+# View all logs at once
+Get-Content logs\combined.log
+```
+
 ### Search Logs
+
+**Linux/Mac (Bash):**
 
 ```bash
 # Find all errors
@@ -198,6 +215,22 @@ grep "ERROR" logs/combined.log
 
 # Find specific user activity
 grep "userId:12345" logs/combined.log
+```
+
+**Windows (PowerShell):**
+
+```powershell
+# Find all errors
+Select-String "ERROR" logs\combined.log
+
+# Find specific user activity
+Select-String "userId:12345" logs\combined.log
+
+# Case-insensitive search
+Select-String "error" logs\combined.log -CaseSensitive:$false
+
+# Show context (2 lines before and after)
+Select-String "ERROR" logs\combined.log -Context 2,2
 ```
 
 ## Production Considerations
