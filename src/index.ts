@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
-
-import {connectDB} from "./database/connect.js";
+import morgan from "morgan";
 import dotenv from "dotenv";
+import logger, {stream} from "./utils/logger.js";
+import {connectDB} from "./database/connect.js";
+
 dotenv.config();
 
 const app = express();
@@ -16,6 +18,9 @@ app.use(
 );
 app.use(express.json());
 
+// HTTP request logging
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms", {stream}));
+
 // Connect to MongoDB
 connectDB();
 
@@ -27,7 +32,6 @@ app.get("/", (req, res) => {
 });
 
 // Starting the server
-
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    logger.info(`Server is running on http://localhost:${PORT}`);
 });
